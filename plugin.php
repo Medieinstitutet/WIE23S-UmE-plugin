@@ -64,4 +64,51 @@ add_filter('the_content', function($content) {
     return null;
 });
 
+function mt_register_collections_post_type() {
+
+    $args = array(
+        'label'               => 'Collections',
+        'public'              => true,
+        'supports'            => array( 'title', 'editor', 'thumbnail' ),
+        'has_archive'         => true
+    );
+
+    register_post_type( 'collection', $args );
+
+}
+add_action( 'init', 'mt_register_collections_post_type' );
+
+function mp_create_occasion_taxonomy() {
+    register_taxonomy(
+        'occasion',  // Taxonomy name
+        'collection',  // Post type to attach to
+        array(
+            'label' => 'Occasions',
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'rewrite' => array( 'slug' => 'occasion' ),
+            'hierarchical' => true,  // True for category-like behavior, false for tag-like
+        )
+    );
+}
+
+add_action( 'init', 'mp_create_occasion_taxonomy' );
+
+function mp_get_latest_collections() {
+
+    $args = array(
+        'post_type' => 'collection',
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'posts_per_page' => 3
+    );
+
+    $args = apply_filters('mp_get_latest_collections_query_args', $args);
+
+    $query = new WP_Query($args);
+    return $query;
+}
+
+add_filter( 'mp_get_latest_collections', 'mp_get_latest_collections' );
+
 ?>
