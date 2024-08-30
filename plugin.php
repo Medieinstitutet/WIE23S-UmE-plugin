@@ -70,7 +70,8 @@ function mt_register_collections_post_type() {
         'label'               => 'Collections',
         'public'              => true,
         'supports'            => array( 'title', 'editor', 'thumbnail' ),
-        'has_archive'         => true
+        'has_archive'         => true,
+        'show_in_rest' => true
     );
 
     register_post_type( 'collection', $args );
@@ -88,6 +89,7 @@ function mp_create_occasion_taxonomy() {
             'show_admin_column' => true,
             'rewrite' => array( 'slug' => 'occasion' ),
             'hierarchical' => true,  // True for category-like behavior, false for tag-like
+            'show_in_rest' => true
         )
     );
 }
@@ -110,5 +112,48 @@ function mp_get_latest_collections() {
 }
 
 add_filter( 'mp_get_latest_collections', 'mp_get_latest_collections' );
+
+function mp_latest_collections($atts) {
+
+        $return_html = '<h2>Senaste kollektioner</h2>';
+
+        if(isset($atts['numberofposts'])) {
+            global $number_of_latest_posts;
+            $number_of_latest_posts = $atts['numberofposts'];
+
+            add_filter( 'mp_get_latest_collections_query_args', function($args) {
+                global $number_of_latest_posts;
+                $args['posts_per_page'] = $number_of_latest_posts;
+    
+                return $args;
+             } );
+        }
+         
+        $query = apply_filters("mp_get_latest_collections", null);
+
+        if($query) {
+
+            ob_start();
+
+            while($query->have_posts()) {
+                $query->the_post();
+
+                ?><a href="<?php echo(get_permalink(get_the_ID())); ?>">
+                <?php
+                the_title();
+                ?>
+                </a>
+                <?php
+            }
+
+            $return_html .= ob_get_clean();
+
+            wp_reset_postdata();
+        }
+
+        return $return_html;
+}
+
+add_shortcode( 'latestCollections', 'mp_latest_collections' );
 
 ?>
