@@ -156,4 +156,6 @@ function mp_latest_collections($atts) {
 
 add_shortcode( 'latestCollections', 'mp_latest_collections' );
 
+add_filter( 'wp_is_application_passwords_available', '__return_true' );
+
 ?>
