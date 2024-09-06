@@ -3,32 +3,10 @@
  * Plugin Name: My Plugin
  */
 
-function mp_test($message_count, $messages) {
-    ?>
-        <div>Det finns <?php echo $message_count ?> meddelanden</div>
-    <?php
-}
-
-add_action('before_form_on_page_template', 'mp_test', 20, 2);
-
-add_action('before_form_on_page_template', function() {
-    ?>
-        <div>Hej och välkommen</div>
-    <?php
-}, 10);
-
 function mt_init() {
-    //remove_action('form_on_page_template', 'mt_output_form', 10);
+    
 }
 add_action('init', 'mt_init');
-
-//add_action('form_on_page_template', 'mp_output_form', 10);
-
-function mp_output_form() {
-    ?>
-       <div>Vi kan inte ta emot meddealnden just nu.</div>
-    <?php
-}
 
 function mp_reverse($messages, $post_id) {
     var_dump($messages);
@@ -71,7 +49,8 @@ function mt_register_collections_post_type() {
         'public'              => true,
         'supports'            => array( 'title', 'editor', 'thumbnail' ),
         'has_archive'         => true,
-        'show_in_rest' => true
+        'show_in_rest' => true,
+        'rewrite' => array( 'slug' => 'fardiga-mixar' )
     );
 
     register_post_type( 'collection', $args );
