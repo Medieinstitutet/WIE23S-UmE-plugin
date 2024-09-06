@@ -18,11 +18,11 @@ add_action('before_form_on_page_template', function() {
 }, 10);
 
 function mt_init() {
-    remove_action('form_on_page_template', 'mt_output_form', 10);
+    //remove_action('form_on_page_template', 'mt_output_form', 10);
 }
 add_action('init', 'mt_init');
 
-add_action('form_on_page_template', 'mp_output_form', 10);
+//add_action('form_on_page_template', 'mp_output_form', 10);
 
 function mp_output_form() {
     ?>
