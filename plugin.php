@@ -42,22 +42,6 @@ add_filter('the_content', function($content) {
     return null;
 });
 
-function mt_register_collections_post_type() {
-
-    $args = array(
-        'label'               => 'Collections',
-        'public'              => true,
-        'supports'            => array( 'title', 'editor', 'thumbnail' ),
-        'has_archive'         => true,
-        'show_in_rest' => false,
-        'rewrite' => array( 'slug' => 'fardiga-mixar' )
-    );
-
-    register_post_type( 'collection', $args );
-
-}
-add_action( 'init', 'mt_register_collections_post_type' );
-
 function mp_create_occasion_taxonomy() {
     register_taxonomy(
         'occasion',  // Taxonomy name
