@@ -207,4 +207,31 @@ my_immutable_function($test_array);
 var_dump($test_array);
 */
 
+function mp_shipping($content) {
+    return 'hahahahahahah'.$content;
+}
+
+add_filter('render_block_woocommerce/cart-order-summary-shipping-block', 'mp_shipping', 1, 1000000);
+
+
+function mp_cart($atts) {
+    global $woocommerce;
+    $items = $woocommerce->cart->get_cart();
+
+    ob_start();
+
+        foreach($items as $item => $values) { 
+            $_product =  wc_get_product( $values['data']->get_id()); 
+            echo "<b>".$_product->get_title().'</b>  <br> Quantity: '.$values['quantity'].'<br>'; 
+            $price = get_post_meta($values['product_id'] , '_price', true);
+            echo "  Price: ".$price."<br>";
+        } 
+    
+        echo('<a href="'.wc_get_checkout_url().'">Till kassan</a>');
+
+        return ob_get_clean();
+}
+
+add_shortcode( 'mt_cart', 'mp_cart' );
+
 ?>
